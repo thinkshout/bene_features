@@ -1,0 +1,20 @@
+{
+    "name": "thinkshout/bene_features",
+    "description": "Provides admin UI and infrastructure to support features built for the Bene Distribution for Non-profits.",
+    "type": "drupal-module",
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "ThinkShout",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ]
+}
