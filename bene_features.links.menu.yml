@@ -1,0 +1,6 @@
+bene.feature.config:
+  title: Bene Features
+  parent: system.admin_config
+  description: 'Enable, disable, and configure Bene Features.'
+  route_name: bene.feature.config
+  weight: -20
