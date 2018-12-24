@@ -19,6 +19,13 @@ function bene_features_example_help($route_name, RouteMatchInterface $route_matc
         'details' => [
           '#markup' => t('Example help page for Bene Features Example.'),
         ],
+        'video' => [
+          '#type' => 'inline_template',
+          '#template' => '{{ helpvideo | raw }}',
+          '#context' => [
+            'helpvideo' => '<div><iframe width="441" height="331" src="https://www.youtube.com/embed/Otbml6WIQPo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>',
+          ],
+        ],
       ];
       break;
 
