@@ -1,0 +1,8 @@
+# Bene Example Feature configuration page
+bene_features_example.configure:
+  path: '/admin/config/bene_features/bene_features_example'
+  defaults:
+    _form: '\Drupal\bene_features_example\Form\FeaturesExampleSettings'
+    _title: 'Example Feature'
+  requirements:
+    _permission: 'configure bene features'
