@@ -17,7 +17,7 @@ function bene_features_example_help($route_name, RouteMatchInterface $route_matc
     case 'help.page.bene_features_example':
       $page = [
         'details' => [
-          '#markup' => t('Example help page for Bene Features Example.'),
+          '#markup' => '<p>' . t('Example help page for Bene Features Example.') . '</p>',
         ],
         'video' => [
           '#type' => 'inline_template',
