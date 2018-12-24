@@ -99,13 +99,13 @@ class BeneFeaturesController extends ControllerBase {
     $row['title'] = [
       '#markup' => $module->info['name'],
     ];
-    $row['description'][] = [
+    $row['description']['description'] = [
       '#markup' => $module->info['description'],
     ];
     // Generate link for module's configuration page, if it has one.
     if (isset($module->info['configure'])) {
       $route_parameters = isset($module->info['configure_parameters']) ? $module->info['configure_parameters'] : [];
-      $row['description'][] = [
+      $row['description']['configure'] = [
         '#type' => 'link',
         '#title' => $this->t('Configure <span class="visually-hidden">the @module module</span>', ['@module' => $module->info['name']]),
         '#url' => Url::fromRoute($module->info['configure'], $route_parameters),
@@ -119,6 +119,22 @@ class BeneFeaturesController extends ControllerBase {
           ],
         ],
       ];
+      // Generate link for module's help page. Assume that if a hook_help()
+      // implementation exists then the module provides an overview page, rather
+      // than checking to see if the page exists, which is costly.
+      if (\Drupal::service('module_handler')->moduleExists('help') && $module->status && in_array($module->getName(), \Drupal::service('module_handler')->getImplementations('help'))) {
+        $row['description']['help'] = [
+          '#type' => 'link',
+          '#title' => $this->t('Help'),
+          '#url' => Url::fromRoute('help.page', ['name' => $module->getName()]),
+          '#options' => [
+            'attributes' => [
+              'class' => ['module-link', 'module-link-help'],
+              'title' => $this->t('Help'),
+            ],
+          ],
+        ];
+      }
     }
     $row['options'] = [
       '#type' => 'link',
