@@ -65,7 +65,7 @@ class BeneFeaturesController extends ControllerBase {
           t('About'),
           t('Options'),
         ],
-        '#empty' => t('You do not have any disabled Bene Features, but if new Bene Features are added to Bene they will appear here.'),
+        '#empty' => t('You do not have any disabled Bene Features, but if new Bene Features are added to Bene they will appear here. (You might want to disable "Features Example" as it doesn\'t really do anything)'),
       ],
     ];
 
