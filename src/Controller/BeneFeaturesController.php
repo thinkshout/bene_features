@@ -15,43 +15,10 @@ use Drupal\Core\Url;
 class BeneFeaturesController extends ControllerBase {
 
   /**
-   * {@inheritdoc}
-   */
-  public function setModule(String $action, String $module) {
-    $modules = system_rebuild_module_data();
-    switch ($action) {
-      case 'remove':
-        // Validate the uninstall string before attempting uninstall:
-        if (isset($modules['bene_' . $module]) && $modules['bene_' . $module]->status) {
-          if (\Drupal::service('module_installer')
-            ->uninstall(['bene_' . $module])) {
-            \Drupal::messenger()->addMessage(
-              t('%module has been disabled. You may re-enable it below.', ['%module' => $modules['bene_' . $module]->info['name']]),
-              MessengerInterface::TYPE_STATUS
-            );
-          }
-        }
-        break;
-
-      case 'install':
-        // Validate the install string before attempting install:
-        if (isset($modules['bene_' . $module]) && !$modules['bene_' . $module]->status) {
-          if (\Drupal::service('module_installer')
-            ->install(['bene_' . $module])) {
-            \Drupal::messenger()->addMessage(
-              t('%module has been enabled. Return to this page when you are ready to disable it.', ['%module' => $modules['bene_' . $module]->info['name']]),
-              MessengerInterface::TYPE_STATUS
-            );
-          }
-        }
-        break;
-
-    }
-    return $this->redirect('bene.feature.config');
-  }
-
-  /**
-   * {@inheritdoc}
+   * A page listing Bene Feature modules and providing control links.
+   *
+   * @return array
+   *   Render array for the config page.
    */
   public function configPage() {
     $modules = system_rebuild_module_data();
@@ -92,6 +59,50 @@ class BeneFeaturesController extends ControllerBase {
     }
 
     return $page;
+  }
+
+  /**
+   * A CSRF-protected route that performs the module enable/disable actions.
+   *
+   * @param string $action
+   *   Either "remove" or "install".
+   * @param string $module
+   *   The name of a bene features module, with the "bene_" prefix removed.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   A redirect response object to go back to the config page.
+   */
+  public function setModule(string $action, string $module) {
+    $modules = system_rebuild_module_data();
+    switch ($action) {
+      case 'remove':
+        // Validate the uninstall string before attempting uninstall:
+        if (isset($modules['bene_' . $module]) && $modules['bene_' . $module]->status) {
+          if (\Drupal::service('module_installer')
+            ->uninstall(['bene_' . $module])) {
+            \Drupal::messenger()->addMessage(
+              t('%module has been disabled. You may re-enable it below.', ['%module' => $modules['bene_' . $module]->info['name']]),
+              MessengerInterface::TYPE_STATUS
+            );
+          }
+        }
+        break;
+
+      case 'install':
+        // Validate the install string before attempting install:
+        if (isset($modules['bene_' . $module]) && !$modules['bene_' . $module]->status) {
+          if (\Drupal::service('module_installer')
+            ->install(['bene_' . $module])) {
+            \Drupal::messenger()->addMessage(
+              t('%module has been enabled. Return to this page when you are ready to disable it.', ['%module' => $modules['bene_' . $module]->info['name']]),
+              MessengerInterface::TYPE_STATUS
+            );
+          }
+        }
+        break;
+
+    }
+    return $this->redirect('bene.feature.config');
   }
 
   /**
