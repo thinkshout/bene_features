@@ -17,36 +17,44 @@ class BeneFeaturesController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
+  public function setModule(String $action, String $module) {
+    $modules = system_rebuild_module_data();
+    switch ($action) {
+      case 'remove':
+        // Validate the uninstall string before attempting uninstall:
+        if (isset($modules['bene_' . $module]) && $modules['bene_' . $module]->status) {
+          if (\Drupal::service('module_installer')
+            ->uninstall(['bene_' . $module])) {
+            \Drupal::messenger()->addMessage(
+              t('%module has been disabled. You may re-enable it below.', ['%module' => $modules['bene_' . $module]->info['name']]),
+              MessengerInterface::TYPE_STATUS
+            );
+          }
+        }
+        break;
+
+      case 'install':
+        // Validate the install string before attempting install:
+        if (isset($modules['bene_' . $module]) && !$modules['bene_' . $module]->status) {
+          if (\Drupal::service('module_installer')
+            ->install(['bene_' . $module])) {
+            \Drupal::messenger()->addMessage(
+              t('%module has been enabled. Return to this page when you are ready to disable it.', ['%module' => $modules['bene_' . $module]->info['name']]),
+              MessengerInterface::TYPE_STATUS
+            );
+          }
+        }
+        break;
+
+    }
+    return $this->redirect('bene.feature.config');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function configPage() {
     $modules = system_rebuild_module_data();
-    $uninstall = \Drupal::request()->query->get('remove') ?: FALSE;
-    if ($uninstall) {
-      // Validate the uninstall string before attempting uninstall:
-      if (isset($modules['bene_' . $uninstall]) && $modules['bene_' . $uninstall]->status) {
-        if (\Drupal::service('module_installer')->uninstall(['bene_' . $uninstall])) {
-          \Drupal::messenger()->addMessage(
-            t('%module has been disabled. You may re-enable it below.', ['%module' => $modules['bene_' . $uninstall]->info['name']]),
-            MessengerInterface::TYPE_STATUS
-          );
-        }
-      }
-      // Clean up the URL and refresh the module status list in the process.
-      return $this->redirect('bene.feature.config');
-    }
-    $install = \Drupal::request()->query->get('install') ?: FALSE;
-    if ($install) {
-      // Validate the install string before attempting install:
-      if (isset($modules['bene_' . $install]) && !$modules['bene_' . $install]->status) {
-        if (\Drupal::service('module_installer')->install(['bene_' . $install])) {
-          \Drupal::messenger()->addMessage(
-            t('%module has been enabled. Return to this page when you are ready to disable it.', ['%module' => $modules['bene_' . $install]->info['name']]),
-            MessengerInterface::TYPE_STATUS
-          );
-        }
-      }
-      // Clean up the URL and refresh the module status list in the process.
-      return $this->redirect('bene.feature.config');
-    }
 
     $page = [
       'enabled' => [
@@ -139,7 +147,10 @@ class BeneFeaturesController extends ControllerBase {
     $row['options'] = [
       '#type' => 'link',
       '#title' => $this->t('Disable <span class="visually-hidden">the @module module</span>', ['@module' => $module->info['name']]),
-      '#url' => Url::fromRoute('bene.feature.config', [], ['query' => ['remove' => substr($module->getName(), 5)]]),
+      '#url' => Url::fromRoute(
+        'bene.feature.set',
+        ['action' => 'remove', 'module' => substr($module->getName(), 5)]
+      ),
       '#options' => [
         'attributes' => [
           'class' => ['button', 'button--small'],
@@ -169,7 +180,10 @@ class BeneFeaturesController extends ControllerBase {
     $row['options'] = [
       '#type' => 'link',
       '#title' => $this->t('Enable <span class="visually-hidden">the @module module</span>', ['@module' => $module->info['name']]),
-      '#url' => Url::fromRoute('bene.feature.config', [], ['query' => ['install' => substr($module->getName(), 5)]]),
+      '#url' => Url::fromRoute(
+        'bene.feature.set',
+        ['action' => 'install', 'module' => substr($module->getName(), 5)]
+      ),
       '#options' => [
         'attributes' => [
           'class' => ['button', 'button--primary', 'button--small'],

@@ -6,3 +6,12 @@ bene.feature.config:
     _title: 'Bene Features'
   requirements:
     _permission: 'configure bene features'
+
+bene.feature.set:
+  path: '/admin/config/bene_features/{action}/{module}'
+  defaults:
+    _controller: '\Drupal\bene_features\Controller\BeneFeaturesController::setModule'
+    _title: 'Bene Features Enable/Disable'
+  requirements:
+    _permission: 'configure bene features'
+    _csrf_token: 'TRUE'
