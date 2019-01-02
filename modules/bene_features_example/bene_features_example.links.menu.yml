@@ -1,0 +1,5 @@
+bene_features_example.configure:
+  title: Example Feature
+  parent: bene.feature.config
+  route_name: bene_features_example.configure
+  description: 'An example/template module for Bene Features.'

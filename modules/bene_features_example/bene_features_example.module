@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Module file for Bene Features Example.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function bene_features_example_help($route_name, RouteMatchInterface $route_match) {
+  $page = NULL;
+  switch ($route_name) {
+    // This route is from the help module: just use the right machine name.
+    case 'help.page.bene_features_example':
+      $page = [
+        'details' => [
+          '#markup' => '<p>' . t('Example help page for Bene Features Example.') . '</p>',
+        ],
+        'video' => [
+          '#type' => 'markup',
+          '#markup' => '<div><iframe width="441" height="331" src="https://www.youtube.com/embed/Otbml6WIQPo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>',
+          '#allowed_tags' => [
+            'iframe',
+          ],
+        ],
+      ];
+      break;
+
+  }
+  return $page;
+}
