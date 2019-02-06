@@ -155,20 +155,28 @@ class BeneFeaturesController extends ControllerBase {
         ];
       }
     }
-    $row['options'] = [
-      '#type' => 'link',
-      '#title' => $this->t('Disable <span class="visually-hidden">the @module module</span>', ['@module' => $module->info['name']]),
-      '#url' => Url::fromRoute(
-        'bene.feature.set',
-        ['action' => 'remove', 'module' => substr($module->getName(), 5)]
-      ),
-      '#options' => [
-        'attributes' => [
-          'class' => ['button', 'button--small'],
+    $validation_reasons = \Drupal::service('module_installer')->validateUninstall([$module->getName()]);
+    if (!$validation_reasons) {
+      $row['options'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Disable <span class="visually-hidden">the @module module</span>', ['@module' => $module->info['name']]),
+        '#url' => Url::fromRoute(
+          'bene.feature.set',
+          ['action' => 'remove', 'module' => substr($module->getName(), 5)]
+        ),
+        '#options' => [
+          'attributes' => [
+            'class' => ['button', 'button--small'],
+          ],
         ],
-      ],
-    ];
-
+      ];
+    }
+    else {
+      $row['options'] = [
+        '#type' => 'markup',
+        '#markup' => t('Cannot Disable'),
+      ];
+    }
     return $row;
   }
 
