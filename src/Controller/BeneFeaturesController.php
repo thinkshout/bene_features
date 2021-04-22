@@ -21,7 +21,7 @@ class BeneFeaturesController extends ControllerBase {
    *   Render array for the config page.
    */
   public function configPage() {
-    $modules = system_rebuild_module_data();
+    $modules = \Drupal::service('extension.list.module')->getList();
 
     $page = [
       'enabled' => [
@@ -73,7 +73,7 @@ class BeneFeaturesController extends ControllerBase {
    *   A redirect response object to go back to the config page.
    */
   public function setModule(string $action, string $module) {
-    $modules = system_rebuild_module_data();
+    $modules = \Drupal::service('extension.list.module')->getList();
     switch ($action) {
       case 'remove':
         // Validate the uninstall string before attempting uninstall:

@@ -1,7 +1,7 @@
 name: Bene Features Example
 description: 'An example feature module: enable, configure, and disable without disrupting anything.'
 type: module
-core: 8.x
+core_version_requirement: ^8 || ^9
 configure: bene_features_example.configure
 dependencies:
   - bene_core
